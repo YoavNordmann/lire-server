@@ -1,4 +1,4 @@
-package com.tikal.lr.server.controller;
+package com.tikal.lire.server.controller;
 
 import java.util.List;
 import java.util.Map;
@@ -16,7 +16,7 @@ import org.jboss.resteasy.annotations.jaxrs.PathParam;
 
 import com.arangodb.ArangoDatabase;
 import com.arangodb.entity.BaseDocument;
-import com.tikal.lr.server.db.DbQueries;
+import com.tikal.lire.server.db.DbQueries;
 
 @Path("/resources/{collection}")
 @Produces(MediaType.APPLICATION_JSON)

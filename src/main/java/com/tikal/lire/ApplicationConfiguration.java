@@ -1,4 +1,4 @@
-package com.tikal.lr;
+package com.tikal.lire;
 
 import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Produces;
@@ -7,7 +7,7 @@ import javax.inject.Singleton;
 
 import com.arangodb.ArangoDatabase;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tikal.lr.server.db.DbQueries;
+import com.tikal.lire.server.db.DbQueries;
 
 @Dependent
 public class ApplicationConfiguration {

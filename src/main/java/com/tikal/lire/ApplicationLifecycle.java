@@ -1,4 +1,4 @@
-package com.tikal.lr;
+package com.tikal.lire;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;

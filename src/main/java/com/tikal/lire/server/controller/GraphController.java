@@ -1,4 +1,4 @@
-package com.tikal.lr.server.controller;
+package com.tikal.lire.server.controller;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -21,7 +21,7 @@ import com.arangodb.ArangoDatabase;
 import com.arangodb.ArangoGraph;
 import com.arangodb.entity.BaseDocument;
 import com.arangodb.entity.EdgeDefinition;
-import com.tikal.lr.server.db.DbQueries;
+import com.tikal.lire.server.db.DbQueries;
 
 @Path("/graphs")
 @Produces(MediaType.APPLICATION_JSON)

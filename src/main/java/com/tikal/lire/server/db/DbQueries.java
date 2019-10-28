@@ -1,4 +1,4 @@
-package com.tikal.lr.server.db;
+package com.tikal.lire.server.db;
 
 import java.util.Collections;
 import java.util.List;

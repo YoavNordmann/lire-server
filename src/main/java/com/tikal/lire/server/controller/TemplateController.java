@@ -1,4 +1,4 @@
-package com.tikal.lr.server.controller;
+package com.tikal.lire.server.controller;
 
 import java.util.List;
 import java.util.Map;
@@ -16,7 +16,7 @@ import org.jboss.resteasy.annotations.jaxrs.PathParam;
 
 import com.arangodb.ArangoDatabase;
 import com.arangodb.entity.BaseDocument;
-import com.tikal.lr.server.db.DbQueries;
+import com.tikal.lire.server.db.DbQueries;
 
 @Path("/templates")
 @Produces(MediaType.APPLICATION_JSON)
@@ -25,7 +25,6 @@ public class TemplateController {
 
 	ArangoDatabase database;
 	DbQueries dbQueries;
-	
 
 	public TemplateController(ArangoDatabase database, DbQueries dbQueries) {
 		this.database = database;
@@ -46,16 +45,18 @@ public class TemplateController {
 	@POST
 	public Response createNewTemplate(Map<String, Object> body) {
 		String name = body.get("name").toString();
-		if(!database.collection(name).exists()) {
+		if (!database.collection(name).exists()) {
 			database.createCollection(name);
 			BaseDocument bd = new BaseDocument(body);
 			bd.setKey(name);
-			return Response.ok(database.collection("templates").insertDocument(bd)).build();			
-		}else {
-			return Response.status(Response.Status.CONFLICT.getStatusCode(), "A template with such a name already exists").build();
+			return Response.ok(database.collection("templates").insertDocument(bd)).build();
+		} else {
+			return Response
+					.status(Response.Status.CONFLICT.getStatusCode(), "A template with such a name already exists")
+					.build();
 		}
 	}
-	
+
 	@DELETE
 	@Path("/{key}")
 	public Response deleteTemplate(@PathParam("key") String name) {

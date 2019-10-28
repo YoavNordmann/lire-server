@@ -1,4 +1,4 @@
-package com.tikal.lr.server.controller;
+package com.tikal.lire.server.controller;
 
 import java.util.Map;
 

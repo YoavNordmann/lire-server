@@ -1,4 +1,4 @@
-package com.tikal.lr.server.infra;
+package com.tikal.lire.server.infra;
 
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
