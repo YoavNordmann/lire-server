@@ -19,34 +19,36 @@ import com.arangodb.ArangoDatabase;
 import com.arangodb.entity.BaseDocument;
 import com.tikal.lire.server.db.DbQueries;
 
-@Path("/resource/{collection}")
+@Path("/systemdata")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class ResourceController {
+public class SystemdataController {
+	
+	private static String COLLECTION_NAME = "system_data";
 
 	ArangoDatabase database;
 	DbQueries dbQueries;
 
-	public ResourceController(ArangoDatabase database, DbQueries dbQueries) {
+	public SystemdataController(ArangoDatabase database, DbQueries dbQueries) {
 		this.database = database;
 		this.dbQueries = dbQueries;
 	}
 
 	@GET
-	public List<BaseDocument> getResources(@PathParam("collection") String collection) {
-		return dbQueries.getAll(collection);
+	public List<BaseDocument> getResources() {
+		return dbQueries.getAll(COLLECTION_NAME);
 	}
 
 	@GET
 	@Path("/{key}")
-	public Response getResource(@PathParam("collection") String collection, @PathParam("key") String key) {
-		return Response.ok(database.collection(collection).getDocument(key, BaseDocument.class)).build();
+	public Response getResource(@PathParam("key") String key) {
+		return Response.ok(database.collection(COLLECTION_NAME).getDocument(key, BaseDocument.class)).build();
 	}
 
 	@POST
-	public Response createResource(@PathParam("collection") String collection, Map<String, Object> data) {
+	public Response createResource(Map<String, Object> data) {
 		BaseDocument bd = new BaseDocument(data);
-		return Response.ok(database.collection(collection).insertDocument(bd)).build();
+		return Response.ok(database.collection(COLLECTION_NAME).insertDocument(bd)).build();
 	}
 	
 	@PUT
@@ -57,10 +59,11 @@ public class ResourceController {
 		return Response.ok(database.collection("templates").updateDocument(key, bd)).build();
 	}
 	
+	
 	@DELETE
 	@Path("/{key}")
-	public Response deleteResource(@PathParam("collection") String collection, @PathParam("key") String key) {
-		return Response.ok(database.collection(collection).deleteDocument(key)).build();
+	public Response deleteResource(@PathParam("key") String key) {
+		return Response.ok(database.collection(COLLECTION_NAME).deleteDocument(key)).build();
 	}
 
 }

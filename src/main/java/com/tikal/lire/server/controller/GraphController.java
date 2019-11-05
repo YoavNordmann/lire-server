@@ -23,7 +23,7 @@ import com.arangodb.entity.BaseDocument;
 import com.arangodb.entity.EdgeDefinition;
 import com.tikal.lire.server.db.DbQueries;
 
-@Path("/graphs")
+@Path("/graph")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class GraphController {
