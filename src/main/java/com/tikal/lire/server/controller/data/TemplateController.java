@@ -1,9 +1,10 @@
-package com.tikal.lire.server.controller;
+package com.tikal.lire.server.controller.data;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -24,14 +25,12 @@ import com.arangodb.entity.BaseDocument;
 import com.tikal.lire.server.db.DbQueries;
 import com.tikal.lire.server.model.types.TemplateType;
 
-import io.quarkus.runtime.util.StringUtil;
-
-@Path("/template")
+@Path("/data/template")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class TemplateController {
 
-	private static String COLLECTION_NAME = "system_templates";
+	private static String COLLECTION_NAME = "templates";
 
 	ArangoDatabase database;
 	DbQueries dbQueries;
@@ -43,11 +42,17 @@ public class TemplateController {
 
 	@GET
 	public List<BaseDocument> getAllTemplates(@QueryParam("type") String type) {
-		return Optional.ofNullable(type).map(t -> {
-			return dbQueries.getAll(COLLECTION_NAME).stream().filter(bd -> {
+		Stream<BaseDocument> queryStream = dbQueries.getAll(COLLECTION_NAME).stream();
+		
+		Stream<BaseDocument> stream = Optional.ofNullable(type).map(t -> {
+			return queryStream.filter(bd -> {
 				return bd.getProperties().get("type").toString().equals(type);
-			}).collect(Collectors.toList());
-		}).orElseGet(() -> dbQueries.getAll(COLLECTION_NAME));
+			});
+		}).orElseGet(() -> queryStream.filter(bd -> {
+			return !bd.getProperties().get("type").toString().equals("system");
+		}));
+		
+		return stream.collect(Collectors.toList());
 	}
 
 	@GET
@@ -82,7 +87,9 @@ public class TemplateController {
 	@DELETE
 	@Path("/{key}")
 	public Response deleteTemplate(@PathParam("key") String name) {
-		database.collection(name).drop();
+		if (database.collection(name).exists()) {
+			database.collection(name).drop();
+		}
 		return Response.ok(database.collection(COLLECTION_NAME).deleteDocument(name)).build();
 	}
 

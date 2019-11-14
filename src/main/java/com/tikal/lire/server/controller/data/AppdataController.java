@@ -1,6 +1,5 @@
-package com.tikal.lire.server.controller;
+package com.tikal.lire.server.controller.data;
 
-import java.util.List;
 import java.util.Map;
 
 import javax.ws.rs.Consumes;
@@ -19,41 +18,36 @@ import com.arangodb.ArangoDatabase;
 import com.arangodb.entity.BaseDocument;
 import com.tikal.lire.server.db.DbQueries;
 
-@Path("/systemdata")
+@Path("/data/system")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class SystemdataController {
+public class AppdataController {
 	
-	private static String COLLECTION_NAME = "system_data";
+	private static String COLLECTION_NAME = "appdata";
 
 	ArangoDatabase database;
 	DbQueries dbQueries;
 
-	public SystemdataController(ArangoDatabase database, DbQueries dbQueries) {
+	public AppdataController(ArangoDatabase database, DbQueries dbQueries) {
 		this.database = database;
 		this.dbQueries = dbQueries;
 	}
 
 	@GET
-	public List<BaseDocument> getResources() {
-		return dbQueries.getAll(COLLECTION_NAME);
-	}
-
-	@GET
 	@Path("/{key}")
-	public Response getResource(@PathParam("key") String key) {
+	public Response getSystemData(@PathParam("key") String key) {
 		return Response.ok(database.collection(COLLECTION_NAME).getDocument(key, BaseDocument.class)).build();
 	}
 
 	@POST
-	public Response createResource(Map<String, Object> data) {
+	public Response createSystemData(Map<String, Object> data) {
 		BaseDocument bd = new BaseDocument(data);
 		return Response.ok(database.collection(COLLECTION_NAME).insertDocument(bd)).build();
 	}
 	
 	@PUT
 	@Path("/{key}")	
-	public Response updateTemplate(@PathParam("key") String key, Map<String, Object> body) {
+	public Response updateSystemData(@PathParam("key") String key, Map<String, Object> body) {
 		BaseDocument bd = new BaseDocument(body);
 		bd.setKey(key);
 		return Response.ok(database.collection("templates").updateDocument(key, bd)).build();
@@ -62,7 +56,7 @@ public class SystemdataController {
 	
 	@DELETE
 	@Path("/{key}")
-	public Response deleteResource(@PathParam("key") String key) {
+	public Response deleteSystemData(@PathParam("key") String key) {
 		return Response.ok(database.collection(COLLECTION_NAME).deleteDocument(key)).build();
 	}
 

@@ -1,4 +1,4 @@
-package com.tikal.lire.server.controller;
+package com.tikal.lire.server.controller.data;
 
 import java.util.List;
 import java.util.Map;
@@ -19,7 +19,7 @@ import com.arangodb.ArangoDatabase;
 import com.arangodb.entity.BaseDocument;
 import com.tikal.lire.server.db.DbQueries;
 
-@Path("/resource/{collection}")
+@Path("/data/resource/{collection}")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class ResourceController {
@@ -33,7 +33,7 @@ public class ResourceController {
 	}
 
 	@GET
-	public List<BaseDocument> getResources(@PathParam("collection") String collection) {
+	public List<BaseDocument> getAll(@PathParam("collection") String collection) {
 		return dbQueries.getAll(collection);
 	}
 
@@ -48,15 +48,15 @@ public class ResourceController {
 		BaseDocument bd = new BaseDocument(data);
 		return Response.ok(database.collection(collection).insertDocument(bd)).build();
 	}
-	
+
 	@PUT
-	@Path("/{key}")	
+	@Path("/{key}")
 	public Response updateTemplate(@PathParam("key") String key, Map<String, Object> body) {
 		BaseDocument bd = new BaseDocument(body);
 		bd.setKey(key);
 		return Response.ok(database.collection("templates").updateDocument(key, bd)).build();
 	}
-	
+
 	@DELETE
 	@Path("/{key}")
 	public Response deleteResource(@PathParam("collection") String collection, @PathParam("key") String key) {
