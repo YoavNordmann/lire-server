@@ -22,6 +22,9 @@ import com.arangodb.entity.BaseDocument;
 import com.arangodb.entity.EdgeDefinition;
 import com.tikal.lire.server.db.DbQueries;
 
+import io.vertx.core.json.JsonArray;
+import io.vertx.core.json.JsonObject;
+
 @Path("/data/graph")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -33,6 +36,15 @@ public class GraphController {
 	public GraphController(ArangoDatabase database, DbQueries dbQueries) {
 		this.database = database;
 		this.dbQueries = dbQueries;
+	}
+	
+	@GET
+	@Path("/{graphname}")
+	public Response getGraph(@PathParam("graphname") String graphname) {
+		ArangoGraph graph = database.graph(graphname);
+		JsonArray resources = new JsonArray();
+		graph.getVertexCollections().stream().forEach(s -> resources.add(s));
+		return Response.ok(new JsonObject().put("name", graph.getInfo().getName()).put("resources", resources)).build();
 	}
 
 	@GET
